@@ -8,8 +8,15 @@ import styles from "./index.module.css";
 import { PublicKey } from '@solana/web3.js';
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { useState } from 'react';
+import UsernameForm from "components/UserNameForm";
 
 export const HomeView: FC = ({}) => {
+    const [username, setUsername] = useState('');
+  
+    const handleUsernameSubmit = (submittedUsername: string) => {
+      setUsername(submittedUsername);
+    };
   const { publicKey } = useWallet();
 
   const onClick = () => {};
@@ -76,6 +83,13 @@ const wallets = useMemo(
                 <p>
                   {publicKey ? <>Your address: {publicKey.toBase58()}</> : null}
                 </p>
+                <div>
+      {username ? (
+        <h2>Thanks, {username}!</h2>
+      ) : (
+        <UsernameForm onSubmit={handleUsernameSubmit} />
+      )}
+    </div>
               </div>
             </div>
           </div>
