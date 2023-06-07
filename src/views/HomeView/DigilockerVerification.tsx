@@ -12,7 +12,7 @@ const DigilockerVerification = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("YOUR_OTP_API_ENDPOINT", { phoneNumber });
+      const response = await axios.post("https://dg-sandbox.setu.co", { phoneNumber });
 
       const { otp } = response.data;
 

@@ -16,14 +16,10 @@ import { PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import authenticateWithDigilocker from "./digilockerAuthentication";
+import DigilockerVerification from "./DigilockerVerification";
 
 export const HomeView: FC = ({}) => {
   const { publicKey } = useWallet();
-  const [loading, setLoading] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [otp, setOTP] = useState("");
-  const [digilockerPIN, setDigilockerPIN] = useState("");
-  const [digilockerVerified, setDigilockerVerified] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
   const GATEKEEPER_NETWORK = new PublicKey(
@@ -36,55 +32,22 @@ export const HomeView: FC = ({}) => {
     [network]
   );
 
-  const handlePhoneNumberSubmit = () => {
-    setLoading(true);
-    // Simulating API call to send OTP to the provided phone number
-    setTimeout(() => {
-      setLoading(false);
-      // Simulating receiving OTP
-      setOTP("123456");
-    }, 2000);
-  };
-
-  const handleVerificationSubmit = async () => {
-    setLoading(true);
-    setTimeout(async () => {
-      setLoading(false);
-      const isVerified = otp === "123456"; // Simulating successful OTP verification
-      if (isVerified) {
-        setIsVerified(true);
-        try {
-          const clientID = "YOUR_CLIENT_ID";
-          const clientSecret = "YOUR_CLIENT_SECRET";
-  
-          const name = await authenticateWithDigilocker(clientID, clientSecret);
-  
-          if (name) {
-            console.log("Verification Successful");
-            console.log("User Name:", name);
-            setDigilockerVerified(true); // Set the Digilocker verification status
-          } else {
-            console.log("DigiLocker Authentication Failed");
-          }
-        } catch (error) {
-          console.error("Error authenticating with DigiLocker:", error);
-        }
-      } else {
-        console.log("Verification Failed");
-      }
-    }, 2000);
-  };
-
   const handleDigilockerVerification = async () => {
-    setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setDigilockerVerified(true);
-      console.log("Digilocker verification successful");
+      const clientID = "YOUR_CLIENT_ID";
+      const clientSecret = "YOUR_CLIENT_SECRET";
+
+      const name = await authenticateWithDigilocker(clientID, clientSecret);
+
+      if (name) {
+        console.log("Verification Successful");
+        console.log("User Name:", name);
+        setIsVerified(true);
+      } else {
+        console.log("DigiLocker Authentication Failed");
+      }
     } catch (error) {
-      console.error("Digilocker verification failed:", error);
-    } finally {
-      setLoading(false);
+      console.error("Error authenticating with DigiLocker:", error);
     }
   };
 
@@ -111,7 +74,6 @@ export const HomeView: FC = ({}) => {
               <div className="max-w-lg">
                 <h1 className="mb-5 text-5xl font-bold">Avatar</h1>
                 <p className="mb-5">On Chain KYC Verification System.</p>
-                <p className="mb-5">Connect your wallet to get started.</p>
                 <p>
                   {publicKey ? <>Your address: {publicKey.toBase58()}</> : null}
                 </p>
@@ -147,55 +109,18 @@ export const HomeView: FC = ({}) => {
             <>
               <h2>Connect Wallet and Verify</h2>
               <p>Click the button below to start the verification process.</p>
-              {!phoneNumber ? (
-                <button onClick={handlePhoneNumberSubmit} disabled={loading}>
-                  Connect Wallet
-                </button>
-              ) : (
-                <>
-                  <h2>Enter Your Phone Number</h2>
-                  <input
-                    type="text"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    placeholder="Phone Number"
-                  />
-                  <button onClick={handlePhoneNumberSubmit} disabled={loading}>
-                    Send OTP
-                  </button>
-                </>
-              )}
+              <WalletProvider wallets={[PhantomWalletAdapter]} autoConnect>
+                <ConnectionProvider endpoint={endpoint}>
+                  <WalletModalProvider>
+                    <DigilockerVerification />
+                  </WalletModalProvider>
+                </ConnectionProvider>
+              </WalletProvider>
             </>
           ) : (
             <>
-              <h2>Verify with Digilocker</h2>
-              <form onSubmit={handleVerificationSubmit}>
-                <label>
-                  Phone Number:
-                  <input
-                    type="text"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                  />
-                </label>
-                <br />
-                <label>
-                  Digilocker PIN:
-                  <input
-                    type="password"
-                    value={digilockerPIN}
-                    onChange={(e) => setDigilockerPIN(e.target.value)}
-                  />
-                </label>
-                <br />
-                {loading ? (
-                  <p>Loading...</p>
-                ) : (
-                  <button type="submit" disabled={loading}>
-                    Verify
-                  </button>
-                )}
-              </form>
+              <h2>Verified Successfully</h2>
+              <p>Your verification is successful.</p>
             </>
           )}
           <button
