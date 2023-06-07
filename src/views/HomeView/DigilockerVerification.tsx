@@ -44,7 +44,7 @@ const DigilockerVerification = () => {
     }, 2000);
   };
 
-  const handleOTPChange = (index, value) => {
+  const handleOTPChange = (index: number, value: string) => {
     const newOtpDigits = [...otpDigits];
     newOtpDigits[index] = value;
     setOtpDigits(newOtpDigits);
