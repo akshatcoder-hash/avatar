@@ -23,6 +23,7 @@ export const HomeView: FC = ({}) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOTP] = useState("");
   const [digilockerPIN, setDigilockerPIN] = useState("");
+  const [digilockerVerified, setDigilockerVerified] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
   const GATEKEEPER_NETWORK = new PublicKey(
@@ -55,12 +56,13 @@ export const HomeView: FC = ({}) => {
         try {
           const clientID = "YOUR_CLIENT_ID";
           const clientSecret = "YOUR_CLIENT_SECRET";
-
+  
           const name = await authenticateWithDigilocker(clientID, clientSecret);
-
+  
           if (name) {
             console.log("Verification Successful");
             console.log("User Name:", name);
+            setDigilockerVerified(true); // Set the Digilocker verification status
           } else {
             console.log("DigiLocker Authentication Failed");
           }
@@ -71,6 +73,19 @@ export const HomeView: FC = ({}) => {
         console.log("Verification Failed");
       }
     }, 2000);
+  };
+
+  const handleDigilockerVerification = async () => {
+    setLoading(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setDigilockerVerified(true);
+      console.log("Digilocker verification successful");
+    } catch (error) {
+      console.error("Digilocker verification failed:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -134,7 +149,7 @@ export const HomeView: FC = ({}) => {
               <p>Click the button below to start the verification process.</p>
               {!phoneNumber ? (
                 <button onClick={handlePhoneNumberSubmit} disabled={loading}>
-                  Start Verification
+                  Connect Wallet
                 </button>
               ) : (
                 <>
@@ -184,10 +199,7 @@ export const HomeView: FC = ({}) => {
             </>
           )}
           <button
-            onClick={() => {
-              // Open Digilocker verification modal
-              console.log("Digilocker verification button clicked");
-            }}
+            onClick={handleDigilockerVerification}
             className="btn btn-primary mt-4"
           >
             Verify with Digilocker
