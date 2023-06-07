@@ -4,7 +4,8 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const DigilockerVerification = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [otp, setOTP] = useState("");
+  const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
+  const [otpSent, setOTPSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setVisible } = useWalletModal();
 
@@ -16,7 +17,8 @@ const DigilockerVerification = () => {
 
       const { otp } = response.data;
 
-      setOTP(otp);
+      setOtpDigits(otp.split(""));
+      setOTPSent(true);
     } catch (error) {
       console.error("Failed to send OTP:", error);
     } finally {
@@ -25,12 +27,14 @@ const DigilockerVerification = () => {
   };
 
   const handleVerificationSubmit = () => {
+    const enteredOTP = otpDigits.join("");
+
     setLoading(true);
 
     setTimeout(() => {
       setLoading(false);
 
-      if (otp === "123456") {
+      if (enteredOTP === "123456") {
         console.log("Verification Successful");
 
         setVisible(false);
@@ -40,9 +44,15 @@ const DigilockerVerification = () => {
     }, 2000);
   };
 
+  const handleOTPChange = (index, value) => {
+    const newOtpDigits = [...otpDigits];
+    newOtpDigits[index] = value;
+    setOtpDigits(newOtpDigits);
+  };
+
   return (
     <div className="max-w-md mx-auto mt-8 p-4 bg-gray-900 rounded-lg shadow-lg text-white">
-      {!otp ? (
+      {!otpSent ? (
         <>
           <h2 className="text-2xl font-semibold mb-4">Enter Your Phone Number</h2>
           <input
@@ -63,13 +73,21 @@ const DigilockerVerification = () => {
       ) : (
         <>
           <h2 className="text-2xl font-semibold mb-4">Verify OTP</h2>
-          <input
-            type="text"
-            value={otp}
-            onChange={(e) => setOTP(e.target.value)}
-            placeholder="OTP"
-            className="border border-gray-300 px-4 py-2 rounded-lg w-full mb-4 bg-gray-800 text-white" // Updated input field background and text color
-          />
+          <p className="text-white mb-4">
+            An OTP has been sent to your phone. Please enter it below.
+          </p>
+          <div className="flex items-center justify-center mb-4">
+            {otpDigits.map((digit, index) => (
+              <input
+                key={index}
+                type="text"
+                value={digit}
+                onChange={(e) => handleOTPChange(index, e.target.value)}
+                maxLength={1}
+                className="border border-gray-300 px-4 py-2 rounded-lg mr-2 w-10 bg-gray-800 text-white text-center"
+              />
+            ))}
+          </div>
           <button
             onClick={handleVerificationSubmit}
             disabled={loading}
