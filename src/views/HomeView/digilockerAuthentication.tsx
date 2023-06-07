@@ -2,8 +2,7 @@ import axios from "axios";
 
 const authenticateWithDigilocker = async (
   clientID: string,
-  clientSecret: string,
-  authToken: string
+  clientSecret: string
 ): Promise<string | null> => {
   try {
     // Request an access token from the DigiLocker API
@@ -26,7 +25,6 @@ const authenticateWithDigilocker = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
-          "X-Auth-Token": authToken,
         },
       }
     );
