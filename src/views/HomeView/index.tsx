@@ -55,13 +55,8 @@ export const HomeView: FC = ({}) => {
         try {
           const clientID = "YOUR_CLIENT_ID";
           const clientSecret = "YOUR_CLIENT_SECRET";
-          const authToken = "YOUR_AUTH_TOKEN";
 
-          const name = await authenticateWithDigilocker(
-            clientID,
-            clientSecret,
-            authToken
-          );
+          const name = await authenticateWithDigilocker(clientID, clientSecret);
 
           if (name) {
             console.log("Verification Successful");
