@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 import { FC, useMemo } from "react";
 import { ConnectionProvider, WalletProvider, useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton, WalletModalProvider } from "@solana/wallet-adapter-react-ui";
@@ -8,7 +9,8 @@ import styles from "./index.module.css";
 import { PublicKey } from '@solana/web3.js';
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-
+import  DigilockerLoginButton  from "components/DigilockerLoginButton";
+ 
 export const HomeView: FC = ({}) => {
   const { publicKey } = useWallet();
 
@@ -18,7 +20,7 @@ export const HomeView: FC = ({}) => {
 
   const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => process.env.REACT_APP_RPC_ENDPOINT || clusterApiUrl(network), [network]);
-
+  
   // TODO: Initiate IdentityButton
   const Content = () => {
     const wallet = useWallet()
@@ -27,6 +29,15 @@ export const HomeView: FC = ({}) => {
     </header>
 }
 
+const LoginPage = () => {
+  return (
+    <div>
+      <h1>Login Page</h1>
+      <DigilockerLoginButton />
+    </div>
+  );
+};
+
 const Gateway = () => {
   const { connection } = useConnection();
   const wallet = useWallet();
@@ -34,15 +45,6 @@ const Gateway = () => {
       <Content/>
   </GatewayProvider>
 }
-const wallets = useMemo(
-  () => [
-      new PhantomWalletAdapter(),
-      // new SolletWalletAdapter({ network }),
-  ],
-  [network]
-);
-
-
   return (
     <div className="container mx-auto max-w-6xl p-8 2xl:px-0">
       <div className={styles.container}>
@@ -76,10 +78,10 @@ const wallets = useMemo(
                 <p>
                   {publicKey ? <>Your address: {publicKey.toBase58()}</> : null}
                 </p>
+                <LoginPage/>
               </div>
             </div>
           </div>
-
           <div className="max-w-4xl mx-auto">
             {/* TODO: Add Civic Button */}
             {/* <GatewayProvider
