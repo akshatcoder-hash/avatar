@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/link-passhref */
 import Link from "next/link";
+import { useState } from "react";
 import { FC, useMemo } from "react";
 import {
   ConnectionProvider,
@@ -23,6 +24,7 @@ import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import TextGradientComponent from "components/text-gradient";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import DigilockerLoginButton from "components/DigilockerLoginButton";
 
 const Terrain = dynamic(() => import("components/threejs/terrain"), {
   ssr: false,
@@ -52,6 +54,14 @@ export const HomeView: FC = ({}) => {
     );
   };
 
+  const LoginPage = () => {
+    return (
+      <div>
+        <DigilockerLoginButton />
+      </div>
+    );
+  };
+
   const Gateway = () => {
     const { connection } = useConnection();
     const wallet = useWallet();
@@ -65,14 +75,6 @@ export const HomeView: FC = ({}) => {
       </GatewayProvider>
     );
   };
-  const wallets = useMemo(
-    () => [
-      new PhantomWalletAdapter(),
-      // new SolletWalletAdapter({ network }),
-    ],
-    [network]
-  );
-
   return (
     <div className="relative bg-[#0a387c]">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -112,19 +114,12 @@ export const HomeView: FC = ({}) => {
               <p className="mt-6 leading-8 font-satoshi-medium text-gray-300 text-md sm:text-xl mb-4">
                 {publicKey ? <>Your address: {publicKey.toBase58()}</> : null}
               </p>
+              <LoginPage />
               <ConnectionProvider endpoint={endpoint}>
                 <WalletModalProvider>
                   <Gateway />
                 </WalletModalProvider>
               </ConnectionProvider>
-              {/* <div className="flex flex-col items-center justify-center mt-10 font-satoshi-medium tracking-wide sm:flex-row gap-y-6 sm:gap-x-6">
-                <a
-                  href="#"
-                  className="rounded-md bg-white px-3.5 py-2.5 text-lg font-semibold text-[#0a387c] shadow-sm hover:bg-gray-200"
-                >
-                  Get started
-                </a>
-              </div> */}
             </div>
             <Terrain />
           </div>
