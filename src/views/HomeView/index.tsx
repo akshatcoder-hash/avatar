@@ -56,7 +56,7 @@ export const HomeView: FC = ({}) => {
 
   const LoginPage = () => {
     return (
-      <div>
+      <div className="mb-4">
         <DigilockerLoginButton />
       </div>
     );
