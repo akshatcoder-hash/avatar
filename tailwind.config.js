@@ -1,60 +1,29 @@
-// default settings can be found here
-// https://unpkg.com/browse/tailwindcss@2.2.17/stubs/defaultConfig.stub.js
-
 module.exports = {
   mode: "jit",
   purge: ["./src/**/*.{js,jsx,ts,tsx}"],
-  darkMode: "media", // or 'false' or 'class'
+  darkMode: ["class"],
+
   theme: {
-    fontFamily: {
-      // sans: ['Graphik', 'sans-serif'],
-      // serif: ['Merriweather', 'serif'],
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
     },
     extend: {
-      // spacing: {
-      //   '128': '32rem',
-      //   '144': '36rem',
-      // },
-      // borderRadius: {
-      //   '4xl': '2rem',
-      // }
+      fontFamily: {
+        "satoshi-medium": ["Satoshi Medium", "sans-serif"],
+        "satoshi-bold": ["Satoshi Bold", "sans-serif"],
+      },
+      colors: {
+        purple: "#7940F1",
+        "dark-purple": "#531BCA",
+      },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/typography"), require("daisyui")],
-  daisyui: {
-    styled: true,
-    themes: [
-      // first one will be the default theme
-      "dark",
-      // uncomment to enable
-      // "light (default)",
-      // "dark",
-      // "cupcake",
-      // "bumblebee",
-      // "emerald",
-      // "corporate",
-      // "synthwave",
-      // "retro",
-      // "cyberpunk",
-      // "valentine",
-      // "halloween",
-      // "garden",
-      // "forest",
-      // "aqua",
-      // "lofi",
-      // "pastel",
-      // "fantasy",
-      // "wireframe",
-      // "black",
-      // "luxury",
-      // "dracula",
-    ],
-    base: true,
-    utils: true,
-    logs: true,
-    rtl: false,
-  },
+  plugins: [require("@tailwindcss/typography", "tailwindcss-animate")],
 };

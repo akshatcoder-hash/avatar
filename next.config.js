@@ -41,8 +41,15 @@ const plugins = [
 ];
 
 const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    appDir: true,
+  },
   distDir: "build",
   swcMinify: true,
+  images: {
+    disableStaticImages: true,
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback.fs = false;

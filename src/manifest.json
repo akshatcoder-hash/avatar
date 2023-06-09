@@ -1,10 +1,8 @@
 {
-  "name": "Caw Caw",
-  "short_name": "Caw Caw",
+  "name": "Avatar",
+  "short_name": "Avatar",
   "display": "standalone",
   "start_url": "./",
-  "theme_color": "#002140",
-  "background_color": "#001529",
   "icons": [
     {
       "src": "icons/icon-192x192.png",

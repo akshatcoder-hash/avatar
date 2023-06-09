@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Satoshi Medium";
+  src: url("/fonts/Satoshi-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Satoshi Bold";
+  src: url("/fonts/Satoshi-Bold.otf") format("opentype");
+  font-weight: 800;
+}
+
+body {
+  overscroll-behavior: none;
+  overflow: hidden;
+}
+
+.webgl {
+  width: 100vw;
+  height: 100vh;
+  outline: none;
+  margin-top: -18%;
+  pointer-events: none;
+}
+
+@media only screen and (max-width: 644px) {
+  .webgl {
+    margin-top: -40%;
+  }
+}
+
+.wallet-adapter-button {
+  background-color: white !important;
+  color: #0a387c !important;
+}
