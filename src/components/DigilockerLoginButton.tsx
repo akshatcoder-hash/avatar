@@ -5,7 +5,7 @@ const RedirectButton: React.FC = () => {
 
   const handleRedirectClick = () => {
     const redirectUrl =
-      "https://dg-sandbox.setu.co/okyc/initiate/8f96e5df-392e-4f49-89f9-835d309c79bb/";
+      "https://dg-sandbox.setu.co/okyc/initiate/ee765218-746e-425b-ae3e-6a991c042ce8";
 
     // Redirect the user to the specified URL
     window.open(redirectUrl, "_blank");
